@@ -33,7 +33,7 @@ public class ImageResponse implements Serializable {
   private String imageMetadata;
 
   @Valid
-  private List<String> detectedObjects = new ArrayList<>();
+  private List<String> detectedObjects;
 
   public ImageResponse id(Integer id) {
     this.id = id;

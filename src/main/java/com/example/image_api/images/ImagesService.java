@@ -24,7 +24,7 @@ public class ImagesService {
         this.imageRepository = imageRepository;
     }
 
-    public ImageResponse addImageAndDetect(ImageRequest imageRequest){
+    public ImageResponse addImageAndDetect(ImageRequest imageRequest) {
         ImageResponse imageResponse = new ImageResponse();
         List<String> objectList = null;
 
@@ -33,6 +33,7 @@ public class ImagesService {
             objectList = getDetectedTags((response.getResult().getTags()));
             imageResponse.setDetectedObjects(objectList);
         }
+
         int imageId = imageRepository.addImage(imageRequest.getLabel(), imageRequest.getImageUrl());
         imageResponse.setId(imageId);
 
@@ -76,6 +77,7 @@ public class ImagesService {
 
     public List<Image> getAllImages() {
         List<ImageEntity> list = imageRepository.getAllImages();
+        // Get an empty list if there is no image
         List<Image> result = new ArrayList<>();
         for (ImageEntity imageEntity : list) {
             Image image = new Image();
@@ -87,6 +89,7 @@ public class ImagesService {
 
     public List<Image> getAllImagesByObjects(List<String> objectNameList) {
         List<ImageEntity> list = imageRepository.getAllImagesByObjects(objectNameList);
+        // Get an empty list if there is no image associated with any of the object
         List<Image> result = new ArrayList<>();
         for (ImageEntity imageEntity : list) {
             Image image = new Image();

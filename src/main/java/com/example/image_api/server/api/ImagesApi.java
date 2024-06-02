@@ -135,7 +135,7 @@ public interface ImagesApi {
      * GET /images/objects : Get images that have the detected objects specified in the query parameter.
      * Return HTTP 200 OK with JSON response containing all image metadata.
      *
-     * @param objects A list of object names (optional)
+     * @param item A list of object names (required)
      * @return successful operation (status code 200)
      *         or Invalid status value (status code 400)
      */
@@ -158,7 +158,7 @@ public interface ImagesApi {
     )
     
     default ResponseEntity<List<Image>> getAllImagesByObjects(
-        @Parameter(name = "objects", description = "A list of object names", in = ParameterIn.QUERY) @Valid @RequestParam(value = "objects", required = false) List<String> objects
+        @NotNull @Parameter(name = "item", description = "A list of object names", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "item", required = true) List<String> item
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

@@ -14,7 +14,7 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://petstore3.swagger.io/api/v3
+  - url: http://localhost:8931/image-api
 tags:
   - name: images
     description: Detect and analyze the objects in image
@@ -71,8 +71,10 @@ paths:
       description: Return HTTP 200 OK with JSON response containing all image metadata.
       operationId: getAllImagesByObjects
       parameters:
-        - name: objects
+        - name: item
           in: query
+          required: true
+          explode : false
           schema:
             type: array
             items:
@@ -146,6 +148,7 @@ components:
           example: TBD
         detectedObjects:
           type: array
+          nullable: true
           items:
             type: string
     Image:

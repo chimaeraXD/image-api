@@ -4,6 +4,7 @@ import com.example.image_api.images.entity.ImageEntity;
 import com.example.image_api.images.entity.ObjectEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -67,7 +68,7 @@ public class ImageRepository {
             Number key = keyHolder.getKey();
             assert key != null;
             return key.intValue();
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             LOG.error("Encounter issue while adding image", e);
             throw e;
         }
@@ -78,7 +79,7 @@ public class ImageRepository {
             String GET_ALL_IMAGE = "select image_id, label, metadata from Images";
             List<ImageEntity> list = jdbcTemplate.query(GET_ALL_IMAGE, getImageRowMapper());
             return list;
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             LOG.error("Encounter issue while getting all images", e);
             throw e;
         }
@@ -94,7 +95,7 @@ public class ImageRepository {
                     "WHERE o.object_name IN (" + objects + ")";
             List<ImageEntity> list = jdbcTemplate.query(GET_ALL_IMAGE_BY_OBJECTS, getImageRowMapper());
             return list;
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             LOG.error("Encounter issue while getting image from object", e);
             throw e;
         }
@@ -113,7 +114,7 @@ public class ImageRepository {
             Number key = keyHolder.getKey();
             assert key != null;
             return key.intValue();
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             LOG.error("Encounter issue while adding object", e);
             throw e;
         }
@@ -131,7 +132,7 @@ public class ImageRepository {
             } else {
                 return null;
             }
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             LOG.error("Encounter issue while getting object by name", e);
             throw e;
         }
