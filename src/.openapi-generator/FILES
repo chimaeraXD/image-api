@@ -1,0 +1,7 @@
+README.md
+pom.xml
+src/generated/java/com/example/image_api/server/api/ApiUtil.java
+src/generated/java/com/example/image_api/server/api/ImagesApi.java
+src/generated/java/com/example/image_api/server/model/Image.java
+src/generated/java/com/example/image_api/server/model/ImageRequest.java
+src/generated/java/com/example/image_api/server/model/ImageResponse.java

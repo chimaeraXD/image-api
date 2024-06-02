@@ -1,0 +1,7 @@
+README.md
+java/com/example/image_api/server/api/ApiUtil.java
+java/com/example/image_api/server/api/ImagesApi.java
+java/com/example/image_api/server/model/Image.java
+java/com/example/image_api/server/model/ImageRequest.java
+java/com/example/image_api/server/model/ImageResponse.java
+pom.xml

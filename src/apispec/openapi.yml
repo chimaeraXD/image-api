@@ -1,0 +1,156 @@
+openapi: 3.0.3
+info:
+  title: Swagger Image API - OpenAPI 3.0
+  description: |-
+    This is a sample Image API based on the OpenAPI 3.0 specification.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: sharonchung@utexes.edu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+tags:
+  - name: images
+    description: Detect and analyze the objects in image
+paths:
+  /images:
+    post:
+      tags:
+        - images
+      summary: Add an image and detect objects in the image if object detect field is enable
+      description: Send a JSON request body including an internet URL referencing an image, an optional label for the image, and an optional field to enable object detection.<br><br> Returns an HTTP 200 OK with a JSON response body including the image data, its label (generate one if the user did not provide it), its identifier provided by the persistent data store, and any objects detected (if object detection was enabled).
+      operationId: addImageAndDetect
+      requestBody:
+        description: Add a new image to database, detect objects in image is optional
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageResponse'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+
+    get:
+      tags:
+        - images
+      summary: Get all image metadata saved in database
+      description: Return HTTP 200 OK with JSON response containing all image metadata.
+      operationId: getAllImages
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Image'
+        '400':
+          description: Invalid status value
+
+  /images/objects:
+    get:
+      tags:
+        - images
+      summary: Get images that have the detected objects specified in the query parameter.
+      description: Return HTTP 200 OK with JSON response containing all image metadata.
+      operationId: getAllImagesByObjects
+      parameters:
+        - name: objects
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+            example: ["banana", "apple", "candy"]
+          description: A list of object names
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Image'
+        '400':
+          description: Invalid status value
+
+  /images/{imageId}:
+    get:
+      tags:
+        - images
+      summary: Find image by image id
+      description: Returns image metadata for the specified image
+      operationId: getImageByImageId
+      parameters:
+        - name: imageId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Image not found
+
+components:
+  schemas:
+    ImageRequest:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          example: https://zoo.jpg
+        label:
+          type: string
+          example: zoo
+        objectDetectionEnable:
+          type: boolean
+      required:
+        - imageUrl
+
+    ImageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 100000
+        label:
+          type: string
+          example: zoo
+        imageMetadata:
+          type: string
+          example: TBD
+        detectedObjects:
+          type: array
+          items:
+            type: string
+    Image:
+      type: object
+      properties:
+        metaData:
+          type: string
+          example: image metadata

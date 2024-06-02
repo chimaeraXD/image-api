@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  title: api.imagga.com/v2
+  description: |-
+    This is client imagaa api
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: sharonchung@utexes.edu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://api.imagga.com/v2
+tags:
+  - name: imagaa
+    description: Detect and analyze the objects in image
+
+security:
+  - basicAuth: [ ]
+
+paths:
+  /tags:
+    get:
+      tags:
+        - imagaa
+      summary: Get detected objects in an image
+      description: By sending an image URL to the /tags endpoint you can get a list of many automatically suggested textual tags
+      operationId: getImageTags
+      parameters:
+        - name: image_url
+          in: query
+          allowReserved: true
+          schema:
+            type: string
+            example: https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg
+          description: The image internet url to be analyzed
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageTagResponse'
+        '400':
+          description: Invalid value
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    ImageTagResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/ImageTagResult'
+
+    ImageTagResult:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageTag'
+        status:
+          $ref: '#/components/schemas/ImageStatus'
+
+    ImageTag:
+      type: object
+      properties:
+        confidence:
+          type: string
+          example: 61.4116096496582
+        tag:
+          $ref: '#/components/schemas/ImageTagName'
+
+    ImageTagName:
+      type: object
+      properties:
+        en:
+          type: string
+          example: banana
+          description: the tag itself which could be an object, concept, color, etc
+
+    ImageStatus:
+      type: object
+      properties:
+        type:
+          type: string
+          example: success
+          description: success / error depending on whether the request was processed successfully
+        text:
+          type: string
+          description: human-readable reason why the processing was unsuccessful
+
+  
