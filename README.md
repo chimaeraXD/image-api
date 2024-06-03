@@ -23,6 +23,8 @@ Generate `ImagesAPI` calls `ImagesController`
 Database access is in `ImageRepository`
 Third party API call is defined in generated `ImagaaAPI`
 
+Database script in database directory, I used MySQL
+
 
 ## API endpoint
 
@@ -41,6 +43,9 @@ I choose this style for the object endpoint, this can be modified
 ```
 http://localhost:8931/image-api/images/objects?item=banana,apple,candy
 ```
+
+see example response from postman for add image endpoint
+![Alt text](example response/bird.JPG)
 
 ## Test
 
