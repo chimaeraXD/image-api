@@ -3,8 +3,8 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 plugins {
 	java
 	idea
-	kotlin("jvm") version "1.7.22"
-	kotlin("plugin.spring") version "1.7.22"
+	kotlin("jvm") version "2.0.0"
+	kotlin("plugin.spring") version "2.0.0"
 	id("org.springframework.boot") version "2.7.8"
 	id("io.spring.dependency-management") version "1.1.5"
 	id("org.openapi.generator") version ("7.6.0")
@@ -82,9 +82,9 @@ tasks {
 		modelPackage.value("com.example.image-api.server.model")
 		configOptions.value(
 			mapOf(
-				"dateLibrary" to "java8",
+				"dateLibrary" to "java17",
 				"interfaceOnly" to "true",
-				"openApiNullable" to "false", // works around bug in 5.2.1 that causes missing import statement in generated code
+				"openApiNullable" to "false",
 				"sourceFolder" to "/java",
 				"serializableModel" to "true",
 				"hideGenerationTimestamp" to "true",
@@ -104,9 +104,9 @@ tasks {
 		modelPackage.value("com.example.image-api.client.imagaa.model")
 		configOptions.value(
 			mapOf(
-				"dateLibrary" to "java8",
+				"dateLibrary" to "java17",
 				"interfaceOnly" to "true",
-				"openApiNullable" to "false", // works around bug ni 5.2.1 that causes missing import statement in generated code
+				"openApiNullable" to "false",
 				"sourceFolder" to "/java",
 				"configPackage" to "com.example.image-api.client.imagaa.config"
 			)

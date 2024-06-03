@@ -52,3 +52,11 @@ see example response from postman for add image endpoint
 Test is just basic unit test for many possible scenarios
 
 There is a `ApiControllerAdvice` class that we can catch exceptions and change it to desired error code.
+
+## Note
+I use the springboot version 2.7.8 is when I migrate to 3.3.0, the openapi generator is causing issue
+```
+error: package javax.validation does not exist
+import javax.validation.Valid;
+```
+So for now I am using this version, the above issue can be a later fix
