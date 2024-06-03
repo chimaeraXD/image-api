@@ -44,5 +44,6 @@ http://localhost:8931/image-api/images/objects?item=banana,apple,candy
 
 ## Test
 
-Test is just basic unit test, but it can include all kind of exception testing
+Test is just basic unit test for many possible scenarios
 
+There is a `ApiControllerAdvice` class that we can catch exceptions and change it to desired error code.

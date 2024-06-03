@@ -1,5 +1,6 @@
 package com.example.image_api.images;
 
+import com.drew.imaging.ImageProcessingException;
 import com.example.image_api.client.imagaa.model.ImageTag;
 import com.example.image_api.client.imagaa.model.ImageTagResponse;
 import com.example.image_api.imagaa.feign.ImagaaFeignClient;
@@ -8,20 +9,32 @@ import com.example.image_api.images.entity.ObjectEntity;
 import com.example.image_api.server.model.Image;
 import com.example.image_api.server.model.ImageRequest;
 import com.example.image_api.server.model.ImageResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.net.URL;
 
 @Service
 public class ImagesService {
     private final ImagaaFeignClient imagaaClient;
     private final ImageRepository imageRepository;
+    private final ImageMetadataService imageMetadataService;
 
-    public ImagesService(ImagaaFeignClient imagaaClient, ImageRepository imageRepository){
+    public ImagesService(ImagaaFeignClient imagaaClient, ImageRepository imageRepository,ImageMetadataService imageMetadataService) {
         this.imagaaClient = imagaaClient;
         this.imageRepository = imageRepository;
+        this.imageMetadataService = imageMetadataService;
     }
 
     public ImageResponse addImageAndDetect(ImageRequest imageRequest) {
@@ -34,21 +47,22 @@ public class ImagesService {
             imageResponse.setDetectedObjects(objectList);
         }
 
-        int imageId = imageRepository.addImage(imageRequest.getLabel(), imageRequest.getImageUrl());
+        String imageMetadata = imageMetadataService.extractMetadata(imageRequest.getImageUrl());
+        int imageId = imageRepository.addImage(imageRequest.getLabel(), imageMetadata);
         imageResponse.setId(imageId);
+        imageResponse.setImageMetadata(imageMetadata);
 
-        if(objectList != null) {
+        if (objectList != null) {
             // add detected objects to database and create mapping with the image
             addObjects(objectList, imageId);
         }
 
-        if(imageRequest.getLabel() == null || imageRequest.getLabel().isBlank()) {
+        if (imageRequest.getLabel() == null || imageRequest.getLabel().isBlank()) {
             imageResponse.setLabel("default");
         } else {
             imageResponse.setLabel(imageRequest.getLabel());
         }
-        // TODO: extract detailed metadata and save into database
-        imageResponse.setImageMetadata(imageRequest.getImageUrl());
+
         return imageResponse;
     }
 
@@ -60,12 +74,12 @@ public class ImagesService {
                 .collect(Collectors.toList());
     }
 
-    private void addObjects (List<String> imageTagList, int imageId) {
+    private void addObjects(List<String> imageTagList, int imageId) {
         int objectId;
         ObjectEntity obj;
-        for(String name: imageTagList) {
+        for (String name : imageTagList) {
             obj = imageRepository.getObjectByName(name);
-            if(obj == null) {
+            if (obj == null) {
                 objectId = imageRepository.addObject(name);
             } else {
                 objectId = obj.getObjectId();
@@ -101,12 +115,12 @@ public class ImagesService {
 
     public Image getImageByImageId(int imageId) {
         ImageEntity image = imageRepository.getImageByImageId(imageId);
-       if (image == null) {
-           return null;
-       } else {
-           Image result = new Image();
-           result.metaData(image.getMetadata());
-           return result;
-       }
+        if (image == null) {
+            return null;
+        } else {
+            Image result = new Image();
+            result.metaData(image.getMetadata());
+            return result;
+        }
     }
 }

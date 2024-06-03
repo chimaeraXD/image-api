@@ -1,5 +1,6 @@
 package com.example.image_api.images;
 
+import com.drew.imaging.ImageMetadataReader;
 import com.example.image_api.client.imagaa.model.ImageTag;
 import com.example.image_api.client.imagaa.model.ImageTagName;
 import com.example.image_api.client.imagaa.model.ImageTagResponse;
@@ -9,7 +10,6 @@ import com.example.image_api.images.entity.ImageEntity;
 import com.example.image_api.server.model.Image;
 import com.example.image_api.server.model.ImageRequest;
 import com.example.image_api.server.model.ImageResponse;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,8 +17,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -31,6 +35,9 @@ class ImagesServiceTest {
 
     @Mock
     private ImageRepository imageRepository;
+
+    @Mock
+    private ImageMetadataService imageMetadataService;
 
     @InjectMocks
     private ImagesService imagesService;
@@ -69,6 +76,8 @@ class ImagesServiceTest {
 
         when(imagaaClient.getImageTags(anyString())).thenReturn(ResponseEntity.ok(tagResponse));
         when(imageRepository.addImage(anyString(), anyString())).thenReturn(1);
+        String expectedJson = "{\"Make\":\"Camera\",\"Model\":\"Camera ABC 999\"}";
+        when(imageMetadataService.extractMetadata(anyString())).thenReturn(expectedJson);
 
         // Act
         ImageResponse imageResponse = imagesService.addImageAndDetect(imageRequest);
@@ -77,7 +86,7 @@ class ImagesServiceTest {
         assertNotNull(imageResponse);
         assertEquals(1, imageResponse.getId());
         assertEquals("Test Image", imageResponse.getLabel());
-        assertEquals("http://example.com/image.jpg", imageResponse.getImageMetadata());
+        assertEquals(expectedJson, imageResponse.getImageMetadata());
         // We only return the tage over 50%, which is cat
         assertEquals(List.of("cat"), imageResponse.getDetectedObjects());
 
@@ -93,6 +102,8 @@ class ImagesServiceTest {
         imageRequest.setLabel("Test Image");
 
         when(imageRepository.addImage(anyString(), anyString())).thenReturn(1);
+        String expectedJson = "{\"Make\":\"Camera\",\"Model\":\"Camera ABC 999\"}";
+        when(imageMetadataService.extractMetadata(anyString())).thenReturn(expectedJson);
 
         // Act
         ImageResponse imageResponse = imagesService.addImageAndDetect(imageRequest);
@@ -101,7 +112,7 @@ class ImagesServiceTest {
         assertNotNull(imageResponse);
         assertEquals(1, imageResponse.getId());
         assertEquals("Test Image", imageResponse.getLabel());
-        assertEquals("http://example.com/image.jpg", imageResponse.getImageMetadata());
+        assertEquals(expectedJson, imageResponse.getImageMetadata());
         assertNull(imageResponse.getDetectedObjects());
 
         verify(imageRepository, times(1)).addImage(anyString(), anyString());
@@ -117,6 +128,8 @@ class ImagesServiceTest {
         imageRequest.setLabel(null);
 
         when(imageRepository.addImage(eq(null), anyString())).thenReturn(1);
+        String expectedJson = "{\"Make\":\"Camera\",\"Model\":\"Camera ABC 999\"}";
+        when(imageMetadataService.extractMetadata(anyString())).thenReturn(expectedJson);
 
         // Act
         ImageResponse imageResponse = imagesService.addImageAndDetect(imageRequest);
@@ -125,12 +138,11 @@ class ImagesServiceTest {
         assertNotNull(imageResponse);
         assertEquals(1, imageResponse.getId());
         assertEquals("default", imageResponse.getLabel());
-        assertEquals("http://example.com/image.jpg", imageResponse.getImageMetadata());
+        assertEquals(expectedJson, imageResponse.getImageMetadata());
         assertNull(imageResponse.getDetectedObjects());
 
         verify(imageRepository, times(1)).addImage(eq(null), anyString());
     }
-
 
     // ====== Get All Images ======
 
