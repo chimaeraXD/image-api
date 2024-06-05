@@ -47,7 +47,7 @@ public class ImageRepository {
             public ObjectEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
                 ObjectEntity objectEntity = new ObjectEntity();
                 objectEntity.setObjectId(rs.getInt("object_id"));
-                objectEntity.setName(rs.getString("name"));
+                objectEntity.setName(rs.getString("object_name"));
                 return objectEntity;
             }
         };
