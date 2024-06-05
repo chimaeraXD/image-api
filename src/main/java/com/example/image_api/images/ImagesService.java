@@ -96,6 +96,7 @@ public class ImagesService {
         for (ImageEntity imageEntity : list) {
             Image image = new Image();
             image.metaData(imageEntity.getMetadata());
+            image.imageId(imageEntity.getImageId());
             result.add(image);
         }
         return result;
@@ -108,6 +109,7 @@ public class ImagesService {
         for (ImageEntity imageEntity : list) {
             Image image = new Image();
             image.metaData(imageEntity.getMetadata());
+            image.imageId(imageEntity.getImageId());
             result.add(image);
         }
         return result;
@@ -120,6 +122,7 @@ public class ImagesService {
         } else {
             Image result = new Image();
             result.metaData(image.getMetadata());
+            result.imageId(image.getImageId());
             return result;
         }
     }

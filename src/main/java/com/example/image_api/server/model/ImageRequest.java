@@ -18,27 +18,19 @@ import javax.annotation.Generated;
  * ImageRequest
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
-public class ImageRequest implements Serializable {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+public class ImageRequest  implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("imageUrl")
   private String imageUrl;
 
+  @JsonProperty("label")
   private String label;
 
+  @JsonProperty("objectDetectionEnable")
   private Boolean objectDetectionEnable;
-
-  public ImageRequest() {
-    super();
-  }
-
-  /**
-   * Constructor with only required parameters
-   */
-  public ImageRequest(String imageUrl) {
-    this.imageUrl = imageUrl;
-  }
 
   public ImageRequest imageUrl(String imageUrl) {
     this.imageUrl = imageUrl;
@@ -50,8 +42,7 @@ public class ImageRequest implements Serializable {
    * @return imageUrl
   */
   @NotNull 
-  @Schema(name = "imageUrl", example = "https://zoo.jpg", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("imageUrl")
+  @Schema(name = "imageUrl", example = "https://zoo.jpg", required = true)
   public String getImageUrl() {
     return imageUrl;
   }
@@ -70,8 +61,7 @@ public class ImageRequest implements Serializable {
    * @return label
   */
   
-  @Schema(name = "label", example = "zoo", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("label")
+  @Schema(name = "label", example = "zoo", required = false)
   public String getLabel() {
     return label;
   }
@@ -90,8 +80,7 @@ public class ImageRequest implements Serializable {
    * @return objectDetectionEnable
   */
   
-  @Schema(name = "objectDetectionEnable", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("objectDetectionEnable")
+  @Schema(name = "objectDetectionEnable", required = false)
   public Boolean getObjectDetectionEnable() {
     return objectDetectionEnable;
   }

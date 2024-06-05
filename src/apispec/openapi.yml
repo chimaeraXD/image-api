@@ -154,6 +154,8 @@ components:
     Image:
       type: object
       properties:
+        imageId:
+          type: integer
         metaData:
           type: string
           example: image metadata

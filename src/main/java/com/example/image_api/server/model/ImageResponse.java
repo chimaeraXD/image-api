@@ -5,7 +5,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -21,19 +20,23 @@ import javax.annotation.Generated;
  * ImageResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
-public class ImageResponse implements Serializable {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+public class ImageResponse  implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("id")
   private Integer id;
 
+  @JsonProperty("label")
   private String label;
 
+  @JsonProperty("imageMetadata")
   private String imageMetadata;
 
+  @JsonProperty("detectedObjects")
   @Valid
-  private List<String> detectedObjects;
+  private List<String> detectedObjects = null;
 
   public ImageResponse id(Integer id) {
     this.id = id;
@@ -45,8 +48,7 @@ public class ImageResponse implements Serializable {
    * @return id
   */
   
-  @Schema(name = "id", example = "100000", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("id")
+  @Schema(name = "id", example = "100000", required = false)
   public Integer getId() {
     return id;
   }
@@ -65,8 +67,7 @@ public class ImageResponse implements Serializable {
    * @return label
   */
   
-  @Schema(name = "label", example = "zoo", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("label")
+  @Schema(name = "label", example = "zoo", required = false)
   public String getLabel() {
     return label;
   }
@@ -85,8 +86,7 @@ public class ImageResponse implements Serializable {
    * @return imageMetadata
   */
   
-  @Schema(name = "imageMetadata", example = "TBD", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("imageMetadata")
+  @Schema(name = "imageMetadata", example = "TBD", required = false)
   public String getImageMetadata() {
     return imageMetadata;
   }
@@ -113,8 +113,7 @@ public class ImageResponse implements Serializable {
    * @return detectedObjects
   */
   
-  @Schema(name = "detectedObjects", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("detectedObjects")
+  @Schema(name = "detectedObjects", required = false)
   public List<String> getDetectedObjects() {
     return detectedObjects;
   }
